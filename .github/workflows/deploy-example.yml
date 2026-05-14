@@ -53,7 +53,7 @@ jobs:
         working-directory: example
         run: >
           flutter build web --release
-          --base-href /easy_ui/
+          --base-href /EasyUI/
           --no-web-resources-cdn
           --pwa-strategy=none
 

@@ -1,6 +1,6 @@
 # Easy UI
 
-[![Deploy Example](https://github.com/Jason-chen-coder/easy_ui/actions/workflows/deploy-example.yml/badge.svg)](https://github.com/Jason-chen-coder/easy_ui/actions/workflows/deploy-example.yml)
+[![Deploy Example](https://github.com/Jason-chen-coder/EasyUI/actions/workflows/deploy-example.yml/badge.svg)](https://github.com/Jason-chen-coder/EasyUI/actions/workflows/deploy-example.yml)
 
 Easy UI is a Flutter component library for building practical, product-facing applications across Web, desktop, and mobile. It provides a migrated and unified set of `Easy*` widgets, design tokens, interaction patterns, and example pages for teams that need a reusable UI layer instead of one-off screens.
 
@@ -8,7 +8,7 @@ Easy UI is a Flutter component library for building practical, product-facing ap
 
 Use the live example as the primary documentation and preview surface:
 
-[https://jason-chen-coder.github.io/easy_ui/](https://jason-chen-coder.github.io/easy_ui/)
+[https://jason-chen-coder.github.io/EasyUI/](https://jason-chen-coder.github.io/EasyUI/)
 
 The example app is deployed from `example/` with GitHub Actions. It includes a standalone landing page, a component workbench, theme switching, locale switching, and Web-first loading feedback. Component-level recipes should live in the example app instead of making this README a long usage catalog.
 
@@ -29,7 +29,7 @@ Add Easy UI from GitHub:
 dependencies:
   easy_ui:
     git:
-      url: https://github.com/Jason-chen-coder/easy_ui.git
+      url: https://github.com/Jason-chen-coder/EasyUI.git
       ref: main
 ```
 
@@ -101,7 +101,7 @@ For GitHub Pages, build with the repository base path:
 ```bash
 cd example
 flutter build web --release \
-  --base-href /easy_ui/ \
+  --base-href /EasyUI/ \
   --no-web-resources-cdn \
   --pwa-strategy=none
 ```
@@ -123,7 +123,7 @@ It performs:
 
 The deployed site is published to:
 
-[https://jason-chen-coder.github.io/easy_ui/](https://jason-chen-coder.github.io/easy_ui/)
+[https://jason-chen-coder.github.io/EasyUI/](https://jason-chen-coder.github.io/EasyUI/)
 
 ## Contributing
 
