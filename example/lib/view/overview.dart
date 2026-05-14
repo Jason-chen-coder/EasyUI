@@ -3,6 +3,52 @@ import 'package:example/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+const _overviewAssetByRoute = <String, String>{
+  'avatar': 'assets/overview/avatar.svg',
+  'button': 'assets/overview/button.svg',
+  'typography': 'assets/overview/typography.svg',
+  'image': 'assets/overview/image.svg',
+  'svg': 'assets/overview/svg.svg',
+  'lottieIcon': 'assets/overview/lottieIcon.svg',
+  'theme': 'assets/overview/theme.svg',
+  'segments': 'assets/overview/segments.svg',
+  'switch': 'assets/overview/switch.svg',
+  'table': 'assets/overview/table.svg',
+  'carousel': 'assets/overview/carousel.svg',
+  'empty': 'assets/overview/empty.svg',
+  'recordCard': 'assets/overview/recordCard.svg',
+  'skeleton': 'assets/overview/skeleton.svg',
+  'statusIndicator': 'assets/overview/statusIndicator.svg',
+  'infoCard': 'assets/overview/infoCard.svg',
+  'flow': 'assets/overview/flow.svg',
+  'select': 'assets/overview/select.svg',
+  'dropdownTextfield3': 'assets/overview/dropdowntextfield3.svg',
+  'form': 'assets/overview/form.svg',
+  'i18nFormFiled': 'assets/overview/i18nFormFiled.svg',
+  'timePicker': 'assets/overview/timePicker.svg',
+  'datePicker': 'assets/overview/datePicker.svg',
+  'easySignaturePadDemo': 'assets/overview/easySignaturePadDemo.svg',
+  'slider': 'assets/overview/slider.svg',
+  'onscreenKeyboard': 'assets/overview/onscreenKeyboard.svg',
+  'dialog': 'assets/overview/dialog.svg',
+  'popover': 'assets/overview/popover.svg',
+  'drawer': 'assets/overview/drawer.svg',
+  'toast': 'assets/overview/toast.svg',
+  'localNotification': 'assets/overview/localNotification.svg',
+  'stepper': 'assets/overview/stepper.svg',
+  'tabs': 'assets/overview/tabs.svg',
+  'scrollSectionsLayout': 'assets/overview/scrollSectionsLayout.svg',
+  'fileDragArea': 'assets/overview/fileDragArea.svg',
+  'markdownViewer': 'assets/overview/markdownViewer.svg',
+  'pdfViewer': 'assets/overview/pdfViewer.svg',
+  'richEditor': 'assets/overview/richEditor.svg',
+  'linearProgress': 'assets/overview/linearProgress.svg',
+  'marqueeGradient': 'assets/overview/marqueeGradient.svg',
+  'longPressCopyable': 'assets/overview/longPressCopyable.svg',
+  'colorPicker': 'assets/overview/colorPicker.svg',
+  'easyPagination': 'assets/overview/easyPagination.svg',
+};
+
 class Overview extends StatelessWidget {
   const Overview({super.key});
 
@@ -76,11 +122,8 @@ class Overview extends StatelessWidget {
 
   Widget _buildComponentCard(BuildContext context, TreeNode node) {
     final routeName = node.routeName ?? node.children.firstOrNull?.routeName;
-
-    final assetPath =
-        routeName != null
-            ? 'assets/overview/${routeName.replaceAll('/', '')}.svg'
-            : null;
+    final routeKey = routeName?.replaceAll('/', '');
+    final assetPath = routeKey == null ? null : _overviewAssetByRoute[routeKey];
 
     Widget buildPlaceholder() {
       return Icon(
