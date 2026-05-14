@@ -1,5 +1,9 @@
 # Easy UI
 
+<p align="center">
+  <img src="readme_images/logo_image.png" alt="Easy UI Logo" width="132">
+</p>
+
 [![部署示例](https://github.com/Jason-chen-coder/EasyUI/actions/workflows/deploy-example.yml/badge.svg)](https://github.com/Jason-chen-coder/EasyUI/actions/workflows/deploy-example.yml)
 
 中文 | [English](README.en.md)
