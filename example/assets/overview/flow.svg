@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="155px" height="160px" viewBox="0 0 155 160" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Flowchart Skeleton</title>
+    <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+            <path d="M0,0 L0,10 L10,5 z" fill="#E0E0E0" />
+        </marker>
+    </defs>
+    <g id="组件骨架图-流程图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Flowchart" transform="translate(0.000000, 5.000000)">
+            
+            <g id="Start-Node" transform="translate(45.000000, 0.000000)">
+                <rect id="Shape" fill="#31DA9F" x="0" y="0" width="65" height="24" rx="12"></rect>
+                <rect id="Text" fill="#FFFFFF" opacity="0.9" x="20" y="9" width="25" height="6" rx="1"></rect>
+            </g>
+
+            <rect id="Line-1" fill="#E0E0E0" x="77" y="24" width="1" height="16"></rect>
+
+            <g id="Process-Node" transform="translate(25.000000, 40.000000)">
+                <rect id="Shape" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="104" height="32" rx="2"></rect>
+                <rect id="Text-Line-1" fill="#EBEBEB" x="12" y="10" width="40" height="6"></rect>
+                <rect id="Text-Line-2" fill="#F5F5F5" x="12" y="20" width="80" height="4"></rect>
+                <rect id="Status-Icon" fill="#31DA9F" opacity="0.3" x="85" y="10" width="8" height="8" rx="4"></rect>
+            </g>
+
+            <rect id="Line-2" fill="#E0E0E0" x="77" y="73" width="1" height="16"></rect>
+
+            <g id="Decision-Node" transform="translate(57.000000, 89.000000)">
+                <path d="M20.5,0 L41,18 L20.5,36 L0,18 L20.5,0 Z" id="Diamond" fill="#F5F5F5" stroke="#E0E0E0"></path>
+                <rect id="Text" fill="#EBEBEB" x="13" y="15" width="15" height="6"></rect>
+            </g>
+
+            <rect id="Line-3" fill="#E0E0E0" x="77" y="125" width="1" height="14"></rect>
+
+            <g id="End-Node" transform="translate(45.000000, 139.000000)">
+                <rect id="Shape" fill="#E0E0E0" x="0" y="0" width="65" height="20" rx="10"></rect>
+                <rect id="Text" fill="#FFFFFF" x="22" y="7" width="21" height="6" rx="1"></rect>
+            </g>
+            
+        </g>
+    </g>
+</svg>

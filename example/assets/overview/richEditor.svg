@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400px" height="300px" viewBox="0 0 400 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rich Text Editor Skeleton</title>
+    <g id="组件骨架图-富文本编辑器" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        
+        <rect id="Editor-Container" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="399" height="299" rx="4"></rect>
+        
+        <g id="Toolbar-Area">
+            <rect id="Toolbar-Divider" fill="#E0E0E0" x="1" y="44" width="398" height="1"></rect>
+            
+            <g id="Toolbar-Buttons" transform="translate(12.000000, 10.000000)">
+                <rect id="Btn-Normal-1" fill="#E0E0E0" x="0" y="0" width="24" height="24" rx="2"></rect>
+                <rect id="Btn-Normal-2" fill="#E0E0E0" x="32" y="0" width="24" height="24" rx="2"></rect>
+                
+                <g id="Btn-Active" transform="translate(64.000000, 0.000000)">
+                    <rect id="Btn-Active-Bg" fill="#31DA9F" opacity="0.2" x="0" y="0" width="24" height="24" rx="2"></rect>
+                    <rect id="Btn-Active-Icon" fill="#31DA9F" x="6" y="6" width="12" height="12" rx="1"></rect>
+                </g>
+
+                <rect id="Vertical-Divider" fill="#E0E0E0" x="100" y="2" width="1" height="20"></rect>
+
+                <rect id="Btn-Normal-3" fill="#E0E0E0" x="113" y="0" width="24" height="24" rx="2"></rect>
+                <rect id="Btn-Normal-4" fill="#E0E0E0" x="145" y="0" width="24" height="24" rx="2"></rect>
+                <rect id="Btn-Normal-5" fill="#E0E0E0" x="177" y="0" width="24" height="24" rx="2"></rect>
+
+                <rect id="Btn-Normal-Right" fill="#E0E0E0" x="350" y="0" width="24" height="24" rx="2"></rect>
+            </g>
+        </g>
+        
+        <g id="Content-Area" transform="translate(20.000000, 65.000000)">
+            <rect id="Text-Title" fill="#EBEBEB" x="0" y="0" width="180" height="12" rx="2"></rect>
+            
+            <g id="Paragraph-1" transform="translate(0.000000, 28.000000)">
+                <rect fill="#F5F5F5" x="0" y="0" width="340" height="8" rx="1"></rect>
+                <rect fill="#F5F5F5" x="0" y="14" width="360" height="8" rx="1"></rect>
+                <rect fill="#F5F5F5" x="0" y="28" width="280" height="8" rx="1"></rect>
+            </g>
+
+            <g id="Paragraph-2" transform="translate(0.000000, 80.000000)">
+                <rect fill="#F5F5F5" x="0" y="0" width="350" height="8" rx="1"></rect>
+                <rect fill="#F5F5F5" x="0" y="14" width="320" height="8" rx="1"></rect>
+                <rect fill="#F5F5F5" x="0" y="28" width="330" height="8" rx="1"></rect>
+                <rect fill="#F5F5F5" x="0" y="42" width="200" height="8" rx="1"></rect>
+            </g>
+
+            <g id="Paragraph-3" transform="translate(0.000000, 145.000000)">
+                <rect fill="#F5F5F5" x="0" y="0" width="300" height="8" rx="1"></rect>
+                <rect fill="#F5F5F5" x="0" y="14" width="240" height="8" rx="1"></rect>
+            </g>
+        </g>
+
+    </g>
+</svg>

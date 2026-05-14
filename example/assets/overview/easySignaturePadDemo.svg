@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="155px" height="110px" viewBox="0 0 155 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Signature Pad Skeleton</title>
+    <g id="组件骨架图-签名板" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Signature-Pad" transform="translate(0.000000, 0.000000)">
+            
+            <rect id="Title-Label" fill="#EBEBEB" x="0" y="0" width="36" height="6"></rect>
+            
+            <g id="Pad-Area" transform="translate(0.000000, 10.000000)">
+                <rect id="Bg" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="154" height="70" rx="4"></rect>
+                
+                <path d="M40,35 C45,25 50,45 60,35 C65,30 70,40 75,38 C85,34 85,50 95,40 C100,35 105,42 115,30" 
+                      id="Signature-Path" 
+                      stroke="#E0E0E0" 
+                      stroke-width="2" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"></path>
+                
+                <rect id="Base-Line" fill="#F5F5F5" x="20" y="55" width="114" height="2" rx="1"></rect>
+                
+                <rect id="Placeholder-Text" fill="#F5F5F5" x="55" y="15" width="44" height="4"></rect>
+            </g>
+
+            <g id="Actions" transform="translate(0.000000, 88.000000)">
+                <g id="Btn-Cancel" transform="translate(75.000000, 0.000000)">
+                    <rect id="Shape" fill="#F5F5F5" x="0" y="0" width="36" height="16" rx="2"></rect>
+                    <rect id="Text" fill="#FFFFFF" x="10" y="5" width="16" height="6"></rect>
+                </g>
+                
+                <g id="Btn-Confirm" transform="translate(116.000000, 0.000000)">
+                    <rect id="Shape" fill="#31DA9F" x="0" y="0" width="39" height="16" rx="2"></rect>
+                    <rect id="Text" fill="#FFFFFF" opacity="0.9" x="11" y="5" width="17" height="6"></rect>
+                </g>
+            </g>
+            
+        </g>
+    </g>
+</svg>

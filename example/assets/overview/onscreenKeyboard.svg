@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400px" height="180px" viewBox="0 0 400 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>屏幕键盘骨架图 (含强调色)</title>
+    <g id="组件骨架图-键盘-强调" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Keyboard-Container" stroke="#E0E0E0" fill="#F0F0F0" x="5" y="5" width="390" height="170" rx="4"></rect>
+        
+        <g id="Keys-Group" transform="translate(15.000000, 15.000000)">
+            
+            <g id="Row-1" transform="translate(0.000000, 0.000000)">
+                <rect id="Key-Tab" fill="#EBEBEB" x="0" y="0" width="50" height="30" rx="2"></rect>
+                <rect id="Key-Q" fill="#EBEBEB" x="60" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-W" fill="#EBEBEB" x="110" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-E" fill="#EBEBEB" x="160" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-Back-Emphasis" fill="#31DA9F" x="210" y="0" width="160" height="30" rx="2"></rect>
+            </g>
+
+            <g id="Row-2" transform="translate(0.000000, 40.000000)">
+                <rect id="Key-Caps" fill="#F5F5F5" x="0" y="0" width="60" height="30" rx="2"></rect>
+                <rect id="Key-A" fill="#F5F5F5" x="70" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-S-Emphasis-Light" fill="#31DA9F" opacity="0.2" x="120" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-D" fill="#F5F5F5" x="170" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-F" fill="#F5F5F5" x="220" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-Enter" fill="#F5F5F5" x="270" y="0" width="100" height="30" rx="2"></rect>
+            </g>
+
+            <g id="Row-3" transform="translate(0.000000, 80.000000)">
+                <rect id="Key-Shift" fill="#F5F5F5" x="0" y="0" width="80" height="30" rx="2"></rect>
+                <rect id="Key-Z" fill="#F5F5F5" x="90" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-X" fill="#F5F5F5" x="140" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-C" fill="#F5F5F5" x="190" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-Up" fill="#F5F5F5" x="240" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-Menu" fill="#F5F5F5" x="290" y="0" width="80" height="30" rx="2"></rect>
+            </g>
+
+            <g id="Row-4" transform="translate(0.000000, 120.000000)">
+                <rect id="Key-Ctrl" fill="#F5F5F5" x="0" y="0" width="50" height="30" rx="2"></rect>
+                <rect id="Key-Space-Emphasis" fill="#31DA9F" x="60" y="0" width="200" height="30" rx="2"></rect>
+                <rect id="Key-Left" fill="#F5F5F5" x="270" y="0" width="40" height="30" rx="2"></rect>
+                <rect id="Key-Down" fill="#F5F5F5" x="320" y="0" width="50" height="30" rx="2"></rect>
+            </g>
+
+        </g>
+    </g>
+</svg>

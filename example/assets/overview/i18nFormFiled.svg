@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400px" height="90px" viewBox="0 0 400 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>I18n Input Skeleton</title>
+    <g id="组件骨架图-国际化输入框" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        
+        <g id="Label-Row" transform="translate(5.000000, 5.000000)">
+            
+            <circle id="Required-Mark" fill="#FF4D4F" cx="2" cy="6" r="2.5"></circle>
+
+            <rect id="Label-Text" fill="#EBEBEB" x="12" y="2" width="100" height="8" rx="2"></rect>
+
+            <g id="Translate-Icon" transform="translate(370.000000, -2.000000)">
+                <rect stroke="#31DA9F" stroke-width="1.5" x="0.75" y="0.75" width="16.5" height="16.5" rx="3"></rect>
+                <path d="M9,4 L12,12 M6,12 L9,4 M7,9 L11,9" stroke="#31DA9F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <rect fill="#31DA9F" x="11" y="1" width="6" height="6" rx="1"></rect>
+                <text font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#FFFFFF" x="12" y="5.5">文</text>
+            </g>
+        </g>
+
+        <g id="Input-Area" transform="translate(0.000000, 32.000000)">
+            
+            <rect id="Input-Border" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="399" height="48" rx="4"></rect>
+            
+            <rect id="Input-Value" fill="#757575" opacity="0.8" x="16" y="20" width="60" height="8" rx="1"></rect>
+
+            <g id="Clear-Btn" transform="translate(370.000000, 16.000000)">
+                <rect fill-opacity="0" x="0" y="0" width="16" height="16"></rect>
+                <path d="M4,4 L12,12 M12,4 L4,12" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round"></path>
+            </g>
+        </g>
+
+    </g>
+</svg>

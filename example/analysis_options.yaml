@@ -1,0 +1,15 @@
+include: package:flutter_lints/flutter.yaml
+
+# The example mirrors migrated upstream demos; suppress legacy-only lints here.
+analyzer:
+  errors:
+    deprecated_member_use: ignore
+    unused_element: ignore
+    unused_field: ignore
+    unused_local_variable: ignore
+
+linter:
+  rules:
+    avoid_print: false
+    library_private_types_in_public_api: false
+    use_build_context_synchronously: false

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400px" height="340px" viewBox="0 0 400 340" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Markdown Viewer Skeleton</title>
+    <g id="组件骨架图-Markdown查看器" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        
+        <rect id="Viewer-Container" stroke="#E0E0E0" fill="#FFFFFF" x="0.5" y="0.5" width="399" height="339" rx="4"></rect>
+        
+        <g id="Content-Rendered" transform="translate(25.000000, 25.000000)">
+            
+            <g id="H1-Title">
+                <rect fill="#EBEBEB" x="0" y="0" width="180" height="14" rx="2"></rect>
+                <rect fill="#E0E0E0" x="0" y="24" width="350" height="1"></rect>
+            </g>
+
+            <g id="Paragraph-Text" transform="translate(0.000000, 45.000000)">
+                <rect fill="#F5F5F5" x="0" y="0" width="320" height="8" rx="1"></rect>
+                <rect fill="#F5F5F5" x="0" y="14" width="280" height="8" rx="1"></rect>
+            </g>
+
+            <g id="Blockquote" transform="translate(0.000000, 85.000000)">
+                <rect id="Quote-Bar" fill="#31DA9F" x="0" y="0" width="4" height="36" rx="2"></rect>
+                <g transform="translate(16.000000, 4.000000)">
+                    <rect fill="#F5F5F5" x="0" y="0" width="260" height="8" rx="1"></rect>
+                    <rect fill="#F5F5F5" x="0" y="14" width="200" height="8" rx="1"></rect>
+                </g>
+            </g>
+
+            <g id="Unordered-List" transform="translate(10.000000, 140.000000)">
+                <g id="List-Item-1">
+                    <circle fill="#E0E0E0" cx="4" cy="4" r="3"></circle>
+                    <rect fill="#F5F5F5" x="16" y="0" width="200" height="8" rx="1"></rect>
+                </g>
+                <g id="List-Item-2" transform="translate(0.000000, 18.000000)">
+                    <circle fill="#E0E0E0" cx="4" cy="4" r="3"></circle>
+                    <rect fill="#F5F5F5" x="16" y="0" width="160" height="8" rx="1"></rect>
+                </g>
+                <g id="List-Item-3" transform="translate(0.000000, 36.000000)">
+                    <circle fill="#E0E0E0" cx="4" cy="4" r="3"></circle>
+                    <rect fill="#F5F5F5" x="16" y="0" width="220" height="8" rx="1"></rect>
+                </g>
+            </g>
+
+            <g id="Code-Block" transform="translate(0.000000, 215.000000)">
+                <rect stroke="#E0E0E0" fill="#FAFAFA" x="0.5" y="0.5" width="350" height="60" rx="4"></rect>
+                <g transform="translate(15.000000, 15.000000)">
+                    <rect fill="#E0E0E0" x="0" y="0" width="100" height="6" rx="1"></rect>
+                    <rect fill="#E0E0E0" x="0" y="12" width="180" height="6" rx="1"></rect>
+                    <rect fill="#E0E0E0" x="0" y="24" width="80" height="6" rx="1"></rect>
+                </g>
+                <rect fill="#E0E0E0" x="310" y="10" width="30" height="6" rx="1"></rect>
+            </g>
+            
+        </g>
+    </g>
+</svg>

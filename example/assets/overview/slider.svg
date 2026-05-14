@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="160px" height="64px" viewBox="0 0 160 64" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <title>Slider</title>
+  <g fill="none" fill-rule="evenodd">
+    <rect x="0" y="0" width="160" height="64" rx="8" fill="#FFFFFF"/>
+    <rect x="18" y="18" width="124" height="4" rx="2" fill="#EBEBEB"/>
+    <rect x="18" y="18" width="72" height="4" rx="2" fill="#31DA9F"/>
+    <circle cx="90" cy="20" r="9" fill="#31DA9F"/>
+    <circle cx="90" cy="20" r="4" fill="#FFFFFF"/>
+    <rect x="18" y="44" width="124" height="4" rx="2" fill="#EBEBEB"/>
+    <rect x="46" y="44" width="68" height="4" rx="2" fill="#31DA9F"/>
+    <circle cx="46" cy="46" r="8" fill="#31DA9F"/>
+    <circle cx="114" cy="46" r="8" fill="#31DA9F"/>
+  </g>
+</svg>

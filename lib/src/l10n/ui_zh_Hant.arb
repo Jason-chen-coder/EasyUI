@@ -1,0 +1,115 @@
+{
+  "all": "全部",
+  "filterFields": "字段篩選",
+  "loadImageFailed": "圖片加載失敗",
+  "close": "關閉",
+  "pickAll": "選擇全部",
+  "retry": "重試",
+  "loadFailed": "加載失敗",
+  "pleasSelectDateTime": "請選擇日期時間",
+  "to": "至",
+  "pleaseSelectTimeRange": "請選擇時間範圍",
+  "selectDateTime": "選擇日期時間",
+  "selectTimeRange": "選擇時間範圍",
+  "weekMon": "一",
+  "weekTue": "二",
+  "weekWed": "三",
+  "weekThu": "四",
+  "weekFri": "五",
+  "weekSat": "六",
+  "weekSun": "日",
+  "selectTime": "選擇時間",
+  "startTime": "開始時間",
+  "endTime": "結束時間",
+  "hour": "時",
+  "minute": "分",
+  "second": "秒",
+  "selectDate": "選擇日期",
+  "pleaseSelect": "請選擇",
+  "startDate": "開始日期",
+  "endDate": "結束日期",
+  "clear": "清除",
+  "cancel": "取消",
+  "confirm": "確定",
+  "years": "{years}年",
+  "@years": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "months": "{months}月",
+  "@months": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "dataMissed": "暫無數據",
+  "reload": "重新加載",
+  "totalRecords": "共{total}條",
+  "@totalRecords": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsPerPage": "{pageSize}條/頁",
+  "@itemsPerPage": {
+    "placeholders": {
+      "pageSize": {
+        "type": "int"
+      }
+    }
+  },
+  "errorToastTitle": "錯誤提示",
+  "okToastTitle": "溫馨提示",
+  "warningToastTitle": "警告提示",
+  "infoToastTitle": "信息提示",
+  "todayShort": "今",
+  "modeDay": "日",
+  "modeWeek": "週",
+  "modeMonth": "月",
+  "modeYear": "年",
+  "modeCustom": "自定義",
+  "pleaseSelectDate": "請選擇日期",
+  "pleaseSelectStartOrEndDate": "請選擇開始/結束日期",
+  "noOptionsYet": "暫無選項",
+  "comingSoonDescription": "我們正在打造一款令人驚嘆的産品，敬請期待",
+  "confirmClose": "確認關閉？",
+  "unsavedChangesWillBeLost": "關閉後未保存的更改將丟失。",
+  "ok": "確定",
+  "uploadButtonText": "點擊上傳或拖動文件到此",
+  "typographyParagraphMore": "更多",
+  "typographyParagraphCollapse": "收起",
+  "loadError": "加載出錯",
+  "pleaseEnter": "請輸入{name}",
+  "@pleaseEnter": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cannotEmpty": "{name}不能爲空",
+  "@cannotEmpty": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "language": "語言",
+  "save": "保存",
+  "hasCopyToClipboard": "已複製到剪切闆",
+  "switchToSystemKeyboard": "切換到繫統鍵盤",
+  "moveToBottom": "移動到底部",
+  "moveToTop": "移動到頂部",
+  "actionZoomUp": "放大",
+  "actionZoomDown": "縮小",
+  "actionZoomFit": "自適應",
+  "actionBackToTop": "回到頂部"
+}

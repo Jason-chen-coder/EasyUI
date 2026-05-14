@@ -1,0 +1,23 @@
+part of 'easy_onscreen_keyboard.dart';
+
+/// An interface that defines the contract for the state of an
+/// onscreen keyboard field.
+abstract interface class OnscreenKeyboardFieldState {
+  /// The [TextEditingController] associated with the field.
+  TextEditingController get controller;
+
+  /// The [FocusNode] associated with the field.
+  FocusNode get focusNode;
+
+  /// The maxLines property of the field.
+  int? get maxLines;
+
+  /// The [List<TextInputFormatter>] associated with the field.
+  List<TextInputFormatter>? get inputFormatters;
+
+  /// The [ValueChanged<String>] callback for text changes.
+  ValueChanged<String>? get onChanged;
+
+  /// Temporarily switches the field back to the platform system keyboard.
+  void switchToSystemKeyboard();
+}

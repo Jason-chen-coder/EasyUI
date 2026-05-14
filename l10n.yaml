@@ -1,0 +1,8 @@
+arb-dir: lib/src/l10n
+output-dir: lib/src/l10n/gen
+template-arb-file: ui_zh.arb
+output-localization-file: easy_ui_localizations.dart
+output-class: EasyUiLocalizations
+nullable-getter: false
+synthetic-package: false
+untranslated-messages-file: easy_ui_untranslated.txt
