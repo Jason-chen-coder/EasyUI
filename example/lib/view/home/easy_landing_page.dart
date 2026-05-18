@@ -745,7 +745,7 @@ class _ComponentPreviewSection extends StatelessWidget {
         }
 
         return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(flex: 8, child: left),
             const SizedBox(width: 34),
