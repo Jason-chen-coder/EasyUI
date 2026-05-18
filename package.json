@@ -1,0 +1,27 @@
+{
+  "name": "easy-ui-skill",
+  "version": "0.1.0",
+  "description": "Install the Easy UI View Builder skill for Codex and Claude Code.",
+  "type": "module",
+  "bin": {
+    "easy-ui-skill": "./bin/easy-ui-skill.mjs"
+  },
+  "files": [
+    "bin/",
+    "skills/easy-ui-view-builder/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jason-chen-coder/EasyUI.git"
+  },
+  "keywords": [
+    "codex",
+    "skill",
+    "flutter",
+    "easy-ui"
+  ],
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Easy UI View Builder"
+  short_description: "Build Flutter views with Easy UI components"
+  default_prompt: "Use $easy-ui-view-builder to build a Flutter page with Easy UI components from my requirements."
+
+policy:
+  allow_implicit_invocation: true

@@ -51,6 +51,41 @@ flutter pub get
 import 'package:easy_ui/easy_ui.dart';
 ```
 
+## AI Skill
+
+仓库内提供了 `easy-ui-view-builder` AI skill，用于让 Codex、Claude Code 等 AI 编程工具根据需求直接选择 Easy UI 组件并生成 Flutter 视图代码。
+
+通过 `npx` 从 GitHub 安装到本机。默认会同时安装到 Codex 和 Claude Code：
+
+```bash
+npx --yes github:Jason-chen-coder/EasyUI
+```
+
+默认安装位置：
+
+- Codex：`${CODEX_HOME:-~/.codex}/skills/easy-ui-view-builder`
+- Claude Code：`~/.claude/skills/easy-ui-view-builder`
+
+也可以只安装到其中一个目标：
+
+```bash
+npx --yes github:Jason-chen-coder/EasyUI -- --target codex
+npx --yes github:Jason-chen-coder/EasyUI -- --target claude
+npx --yes github:Jason-chen-coder/EasyUI -- --target claude-project
+```
+
+安装后重启 Codex 或 Claude Code，让新的 skill 被加载。使用时可以直接提到 skill 名称：
+
+```text
+$easy-ui-view-builder 帮我用 Easy UI 做一个带筛选、表格、分页和详情抽屉的订单管理页面
+```
+
+如果后续发布到 npm registry，也可以使用同样的参数：
+
+```bash
+npx --yes easy-ui-skill@latest
+```
+
 ## 环境要求
 
 当前仓库使用以下版本验证：

@@ -1,12 +1,16 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _easyUiRepoUrl = 'https://github.com/Jason-chen-coder/EasyUI';
 const _easyUiPreviewUrl = 'https://jason-chen-coder.github.io/EasyUI/';
 const _githubProfileUrl = 'https://github.com/Jason-chen-coder';
 const _sponsorEmail = 'hongxin.jasonchen@gmail.com';
+
+const _skillInstallCommand = 'npx --yes github:Jason-chen-coder/EasyUI';
 
 Future<void> _launchExternal(
   Uri uri, {
@@ -21,6 +25,21 @@ Future<void> _launchExternal(
   if (!launched) {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
+}
+
+Future<void> _copyText(
+  BuildContext context, {
+  required String text,
+  required String message,
+}) async {
+  await Clipboard.setData(ClipboardData(text: text));
+  if (!context.mounted) {
+    return;
+  }
+
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(SnackBar(content: Text(message)));
 }
 
 class _LandingTypography {
@@ -113,12 +132,25 @@ class _LandingTypography {
   }
 }
 
-class EasyLandingPage extends StatelessWidget {
+class EasyLandingPage extends StatefulWidget {
   const EasyLandingPage({super.key, required this.onNavigate});
 
   final ValueChanged<String> onNavigate;
 
   static const _maxWidth = 1180.0;
+
+  @override
+  State<EasyLandingPage> createState() => _EasyLandingPageState();
+}
+
+class _EasyLandingPageState extends State<EasyLandingPage> {
+  final _revealTick = ValueNotifier<int>(0);
+
+  @override
+  void dispose() {
+    _revealTick.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,36 +160,171 @@ class EasyLandingPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: palette.background,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: _HeroSection(palette: palette, onNavigate: onNavigate),
-          ),
-          SliverToBoxAdapter(
-            child: _ConstrainedSection(
-              top: 34,
-              bottom: 28,
-              child: _FeatureSection(palette: palette),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: _ConstrainedSection(
-              top: 20,
-              bottom: 34,
-              child: _ComponentPreviewSection(
-                palette: palette,
-                onNavigate: onNavigate,
+      body: _ScrollRevealScope(
+        listenable: _revealTick,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            if (notification.metrics.axis == Axis.vertical) {
+              _revealTick.value++;
+            }
+            return false;
+          },
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: _HeroSection(
+                  palette: palette,
+                  onNavigate: widget.onNavigate,
+                ),
               ),
-            ),
+              SliverToBoxAdapter(
+                child: _ConstrainedSection(
+                  top: 34,
+                  bottom: 28,
+                  child: _FeatureSection(palette: palette),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _ConstrainedSection(
+                  top: 20,
+                  bottom: 34,
+                  child: _AiSkillSection(palette: palette),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _ConstrainedSection(
+                  top: 20,
+                  bottom: 34,
+                  child: _ComponentPreviewSection(
+                    palette: palette,
+                    onNavigate: widget.onNavigate,
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _ConstrainedSection(
+                  top: 20,
+                  bottom: 64,
+                  child: _ResourceSection(palette: palette),
+                ),
+              ),
+            ],
           ),
-          SliverToBoxAdapter(
-            child: _ConstrainedSection(
-              top: 20,
-              bottom: 64,
-              child: _ResourceSection(palette: palette),
-            ),
-          ),
-        ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ScrollRevealScope extends InheritedWidget {
+  const _ScrollRevealScope({required this.listenable, required super.child});
+
+  final Listenable listenable;
+
+  static Listenable? maybeOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<_ScrollRevealScope>()
+        ?.listenable;
+  }
+
+  @override
+  bool updateShouldNotify(_ScrollRevealScope oldWidget) {
+    return listenable != oldWidget.listenable;
+  }
+}
+
+class _ViewportFadeIn extends StatefulWidget {
+  const _ViewportFadeIn({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_ViewportFadeIn> createState() => _ViewportFadeInState();
+}
+
+class _ViewportFadeInState extends State<_ViewportFadeIn> {
+  static const _threshold = 120.0;
+  static const _duration = Duration(milliseconds: 300);
+
+  bool _visible = false;
+  Listenable? _revealSignal;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _attachRevealSignal();
+    _scheduleVisibilityCheck();
+  }
+
+  @override
+  void dispose() {
+    _revealSignal?.removeListener(_checkVisibility);
+    super.dispose();
+  }
+
+  void _attachRevealSignal() {
+    final nextSignal = _ScrollRevealScope.maybeOf(context);
+    if (nextSignal == _revealSignal) {
+      return;
+    }
+
+    _revealSignal?.removeListener(_checkVisibility);
+    _revealSignal = nextSignal;
+    _revealSignal?.addListener(_checkVisibility);
+  }
+
+  void _scheduleVisibilityCheck() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _checkVisibility();
+      }
+    });
+  }
+
+  void _checkVisibility() {
+    if (_visible) {
+      return;
+    }
+
+    final mediaQuery = MediaQuery.maybeOf(context);
+    if (mediaQuery?.disableAnimations ?? false) {
+      setState(() => _visible = true);
+      _revealSignal?.removeListener(_checkVisibility);
+      _revealSignal = null;
+      return;
+    }
+
+    final renderObject = context.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) {
+      return;
+    }
+
+    final top = renderObject.localToGlobal(Offset.zero).dy;
+    final bottom = top + renderObject.size.height;
+    final viewportHeight = mediaQuery?.size.height ?? 0;
+
+    if (bottom >= -_threshold && top <= viewportHeight + _threshold) {
+      setState(() => _visible = true);
+      _revealSignal?.removeListener(_checkVisibility);
+      _revealSignal = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final disableAnimations =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final visible = _visible || disableAnimations;
+
+    return AnimatedOpacity(
+      opacity: visible ? 1 : 0,
+      duration: _duration,
+      curve: Curves.easeOutCubic,
+      child: AnimatedSlide(
+        offset: visible ? Offset.zero : const Offset(0, 0.035),
+        duration: _duration,
+        curve: Curves.easeOutCubic,
+        child: widget.child,
       ),
     );
   }
@@ -414,36 +581,32 @@ class _LogoShowcaseState extends State<_LogoShowcase>
                     progress: progress,
                     delay: 0,
                     size: badgeSize,
-                    icon: Icons.smart_button_outlined,
-                    color: palette.blue,
-                    palette: palette,
+                    label: 'GitHub',
+                    assetPath: 'assets/images/hero_github.png',
                   ),
                   _OrbitBadge(
                     alignment: const Alignment(0.72, -0.56),
                     progress: progress,
                     delay: 0.22,
                     size: badgeSize,
-                    icon: Icons.table_chart_outlined,
-                    color: palette.green,
-                    palette: palette,
+                    label: 'Claude Code',
+                    assetPath: 'assets/images/hero_claude_code.png',
                   ),
                   _OrbitBadge(
                     alignment: const Alignment(-0.68, 0.64),
                     progress: progress,
                     delay: 0.48,
                     size: badgeSize,
-                    icon: Icons.tune,
-                    color: palette.amber,
-                    palette: palette,
+                    label: 'Codex',
+                    assetPath: 'assets/images/hero_codex.jpg',
                   ),
                   _OrbitBadge(
                     alignment: const Alignment(0.67, 0.66),
                     progress: progress,
                     delay: 0.72,
                     size: badgeSize,
-                    icon: Icons.edit_note_outlined,
-                    color: palette.red,
-                    palette: palette,
+                    label: 'Cursor',
+                    assetPath: 'assets/images/hero_cursor.jpg',
                   ),
                   _SparkDot(
                     alignment: const Alignment(-0.18, -0.86),
@@ -487,18 +650,16 @@ class _OrbitBadge extends StatelessWidget {
     required this.progress,
     required this.delay,
     required this.size,
-    required this.icon,
-    required this.color,
-    required this.palette,
+    required this.label,
+    required this.assetPath,
   });
 
   final Alignment alignment;
   final double progress;
   final double delay;
   final double size;
-  final IconData icon;
-  final Color color;
-  final _LandingPalette palette;
+  final String label;
+  final String assetPath;
 
   @override
   Widget build(BuildContext context) {
@@ -509,22 +670,20 @@ class _OrbitBadge extends StatelessWidget {
       alignment: alignment,
       child: Transform.translate(
         offset: drift,
-        child: Container(
+        child: SizedBox(
           width: size,
           height: size,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: color.withValues(alpha: 0.22)),
-            boxShadow: [
-              BoxShadow(
-                color: color.withValues(alpha: 0.08),
-                blurRadius: 18,
-                offset: const Offset(0, 10),
+          child: Semantics(
+            image: true,
+            label: label,
+            child: ClipOval(
+              child: Image.asset(
+                assetPath,
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.high,
               ),
-            ],
+            ),
           ),
-          child: Icon(icon, color: color, size: size * 0.48),
         ),
       ),
     );
@@ -704,12 +863,409 @@ class _FeatureSection extends StatelessWidget {
                 crossAxisSpacing: 18,
               ),
               itemBuilder:
-                  (context, index) =>
-                      _FeatureCard(data: items[index], palette: palette),
+                  (context, index) => _ViewportFadeIn(
+                    child: _FeatureCard(data: items[index], palette: palette),
+                  ),
             );
           },
         ),
       ],
+    );
+  }
+}
+
+class _AiSkillSection extends StatelessWidget {
+  const _AiSkillSection({required this.palette});
+
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ViewportFadeIn(
+      child: Container(
+        decoration: BoxDecoration(
+          color: palette.surface,
+          border: Border.all(color: palette.border),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.all(28),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final compact = constraints.maxWidth < 900;
+            final intro = _AiSkillIntro(palette: palette);
+            final install = _AiSkillInstallPanel(palette: palette);
+
+            if (compact) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [intro, const SizedBox(height: 24), install],
+              );
+            }
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(flex: 9, child: intro),
+                const SizedBox(width: 32),
+                Expanded(flex: 10, child: install),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _AiSkillIntro extends StatelessWidget {
+  const _AiSkillIntro({required this.palette});
+
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    final steps = [
+      _SkillStepData('01', '描述需求', palette.blue),
+      _SkillStepData('02', '匹配 Easy 组件', palette.green),
+      _SkillStepData('03', '生成 Flutter 页面', palette.amber),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('AI SKILL', style: _LandingTypography.sectionEyebrow(palette)),
+        const SizedBox(height: 8),
+        Text(
+          '用 AI 直接构建 Easy UI 页面',
+          style: _LandingTypography.sectionTitle(
+            palette,
+          ).copyWith(color: palette.textStrong),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'easy-ui-view-builder 内置完整公开组件索引，让 Codex 和 Claude Code 都能从业务需求出发，优先使用真实的 Easy UI 组件和示例模式生成 Flutter 视图。',
+          style: _LandingTypography.body(palette),
+        ),
+        const SizedBox(height: 24),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children:
+              steps
+                  .map((step) => _SkillStep(data: step, palette: palette))
+                  .toList(),
+        ),
+      ],
+    );
+  }
+}
+
+class _AiSkillInstallPanel extends StatelessWidget {
+  const _AiSkillInstallPanel({required this.palette});
+
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    void copyInstallCommand() {
+      _copyText(context, text: _skillInstallCommand, message: '安装命令已复制');
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Material(
+          color: palette.codeBackground,
+          borderRadius: BorderRadius.circular(8),
+          child: InkWell(
+            onTap: copyInstallCommand,
+            borderRadius: BorderRadius.circular(8),
+            mouseCursor: SystemMouseCursors.click,
+            child: Ink(
+              decoration: BoxDecoration(
+                color: palette.codeBackground,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: palette.borderStrong.withValues(alpha: 0.35),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.terminal, color: palette.codeText, size: 18),
+                        const SizedBox(width: 8),
+                        Text(
+                          'npx 安装',
+                          style: _LandingTypography.contentTitle(
+                            palette,
+                          ).copyWith(color: palette.codeText),
+                        ),
+                        const Spacer(),
+                        Tooltip(
+                          message: '复制安装命令',
+                          child: IconButton(
+                            onPressed: copyInstallCommand,
+                            icon: Icon(
+                              Icons.content_copy_outlined,
+                              color: palette.codeText,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    SelectableText(
+                      _skillInstallCommand,
+                      style: TextStyle(
+                        color: palette.codeText,
+                        fontSize: 14,
+                        height: 1.55,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: palette.surface.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: palette.codeText.withValues(alpha: 0.16),
+                        ),
+                      ),
+                      child: Text(
+                        '默认安装到 Codex 和 Claude Code。安装后重启对应工具，然后用调用示例开始生成页面。',
+                        style: _LandingTypography.bodySmall(
+                          palette,
+                        ).copyWith(color: palette.codeText),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        _AiSkillUsageExample(palette: palette),
+      ],
+    );
+  }
+}
+
+class _AiSkillUsageExample extends StatefulWidget {
+  const _AiSkillUsageExample({required this.palette});
+
+  final _LandingPalette palette;
+
+  @override
+  State<_AiSkillUsageExample> createState() => _AiSkillUsageExampleState();
+}
+
+class _AiSkillUsageExampleState extends State<_AiSkillUsageExample> {
+  static const _aiOutputText = '''
+正在匹配 Easy UI 组件...
+EasySearchAnchor  处理筛选与关键词搜索
+EasyDataTable     承载订单列表
+EasyPagination    控制分页状态
+EasyDrawer        展示订单详情
+EasyStatusIndicator 标记订单状态
+生成页面: OrderManagementView''';
+
+  Timer? _typingTimer;
+  Timer? _cursorTimer;
+  int _visibleCharacters = 0;
+  bool _startedTyping = false;
+  bool _startedCursorBlink = false;
+  bool _cursorVisible = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final disableAnimations =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (disableAnimations) {
+      _typingTimer?.cancel();
+      _cursorTimer?.cancel();
+      _visibleCharacters = _aiOutputText.length;
+      _cursorVisible = true;
+      _startedCursorBlink = false;
+      return;
+    }
+
+    if (!_startedCursorBlink) {
+      _startedCursorBlink = true;
+      _cursorTimer = Timer.periodic(const Duration(milliseconds: 520), (timer) {
+        if (!mounted) {
+          timer.cancel();
+          return;
+        }
+
+        setState(() {
+          _cursorVisible = !_cursorVisible;
+        });
+      });
+    }
+
+    if (!_startedTyping) {
+      _startedTyping = true;
+      _typingTimer = Timer.periodic(const Duration(milliseconds: 24), (timer) {
+        if (!mounted) {
+          timer.cancel();
+          return;
+        }
+
+        setState(() {
+          _visibleCharacters = math.min(
+            _visibleCharacters + 1,
+            _aiOutputText.length,
+          );
+        });
+
+        if (_visibleCharacters >= _aiOutputText.length) {
+          timer.cancel();
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _typingTimer?.cancel();
+    _cursorTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = widget.palette;
+    final typedText = _aiOutputText.substring(0, _visibleCharacters);
+    final userTextStyle = TextStyle(
+      color: palette.blue,
+      fontSize: 13,
+      height: 1.55,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 0,
+    );
+    final terminalTextStyle = TextStyle(
+      color: palette.codeText,
+      fontSize: 13,
+      height: 1.58,
+      fontWeight: FontWeight.w600,
+      letterSpacing: 0,
+    );
+
+    return Material(
+      color: palette.codeBackground,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: palette.codeBackground,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: palette.borderStrong.withValues(alpha: 0.35),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 42,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: palette.surface.withValues(alpha: 0.07),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(8),
+                ),
+                border: Border(
+                  bottom: BorderSide(
+                    color: palette.codeText.withValues(alpha: 0.12),
+                  ),
+                ),
+              ),
+              child: Row(
+                children: [
+                  _TerminalDot(color: palette.red),
+                  const SizedBox(width: 6),
+                  _TerminalDot(color: palette.amber),
+                  const SizedBox(width: 6),
+                  _TerminalDot(color: palette.green),
+                  const Spacer(),
+                  Icon(
+                    Icons.auto_awesome_outlined,
+                    color: palette.amber,
+                    size: 17,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '使用实例',
+                    style: _LandingTypography.bodySmall(
+                      palette,
+                    ).copyWith(color: palette.codeText),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    r'$ 帮我用 Easy UI 做一个订单管理页，包含筛选、表格、分页和详情抽屉。',
+                    style: userTextStyle,
+                  ),
+                  const SizedBox(height: 16),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 154),
+                    child: RichText(
+                      text: TextSpan(
+                        style: terminalTextStyle,
+                        children: [
+                          TextSpan(text: typedText),
+                          TextSpan(
+                            text: '|',
+                            style: terminalTextStyle.copyWith(
+                              color: palette.codeText.withValues(
+                                alpha: _cursorVisible ? 1 : 0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TerminalDot extends StatelessWidget {
+  const _TerminalDot({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      child: const SizedBox(width: 8, height: 8),
     );
   }
 }
@@ -747,9 +1303,9 @@ class _ComponentPreviewSection extends StatelessWidget {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(flex: 8, child: left),
-            const SizedBox(width: 34),
             Expanded(flex: 9, child: right),
+            const SizedBox(width: 34),
+            Expanded(flex: 8, child: left),
           ],
         );
       },
@@ -892,47 +1448,49 @@ class _SponsorProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: '打开 ${data.name}',
-      child: InkWell(
-        onTap:
-            () => _launchExternal(
-              Uri.parse(data.url),
-              webOnlyWindowName: '_self',
-            ),
-        borderRadius: BorderRadius.circular(8),
-        mouseCursor: SystemMouseCursors.click,
-        child: Padding(
-          padding: const EdgeInsets.all(4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _SponsorProjectIcon(data: data, palette: palette),
-              const SizedBox(width: 22),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      data.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: _LandingTypography.contentTitle(
-                        palette,
-                      ).copyWith(fontSize: 22),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      data.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: _LandingTypography.body(palette),
-                    ),
-                  ],
-                ),
+    return _ViewportFadeIn(
+      child: Tooltip(
+        message: '打开 ${data.name}',
+        child: InkWell(
+          onTap:
+              () => _launchExternal(
+                Uri.parse(data.url),
+                webOnlyWindowName: '_self',
               ),
-            ],
+          borderRadius: BorderRadius.circular(8),
+          mouseCursor: SystemMouseCursors.click,
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _SponsorProjectIcon(data: data, palette: palette),
+                const SizedBox(width: 22),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        data.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: _LandingTypography.contentTitle(
+                          palette,
+                        ).copyWith(fontSize: 22),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        data.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: _LandingTypography.body(palette),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -1313,6 +1871,43 @@ class _FeatureCardState extends State<_FeatureCard> {
   }
 }
 
+class _SkillStep extends StatelessWidget {
+  const _SkillStep({required this.data, required this.palette});
+
+  final _SkillStepData data;
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      decoration: BoxDecoration(
+        color: data.color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: data.color.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            data.index,
+            style: _LandingTypography.bodySmall(
+              palette,
+            ).copyWith(color: data.color, fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            data.label,
+            style: _LandingTypography.bodySmall(
+              palette,
+            ).copyWith(color: palette.textStrong),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _CategoryRail extends StatelessWidget {
   const _CategoryRail({required this.palette, required this.onNavigate});
 
@@ -1332,25 +1927,27 @@ class _CategoryRail extends StatelessWidget {
       ),
     ];
 
-    return Container(
-      decoration: BoxDecoration(
-        color: palette.surface,
-        border: Border.all(color: palette.border),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children:
-            categories.indexed.map((entry) {
-              final index = entry.$1;
-              final data = entry.$2;
-              return _CategoryRow(
-                data: data,
-                index: index,
-                palette: palette,
-                onNavigate: onNavigate,
-                showDivider: index != categories.length - 1,
-              );
-            }).toList(),
+    return _ViewportFadeIn(
+      child: Container(
+        decoration: BoxDecoration(
+          color: palette.surface,
+          border: Border.all(color: palette.border),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children:
+              categories.indexed.map((entry) {
+                final index = entry.$1;
+                final data = entry.$2;
+                return _CategoryRow(
+                  data: data,
+                  index: index,
+                  palette: palette,
+                  onNavigate: onNavigate,
+                  showDivider: index != categories.length - 1,
+                );
+              }).toList(),
+        ),
       ),
     );
   }
@@ -1446,6 +2043,14 @@ class _FeatureData {
   final Color color;
   final String title;
   final String description;
+}
+
+class _SkillStepData {
+  const _SkillStepData(this.index, this.label, this.color);
+
+  final String index;
+  final String label;
+  final Color color;
 }
 
 class _SponsorProjectData {

@@ -51,6 +51,41 @@ Import the package where you build your UI:
 import 'package:easy_ui/easy_ui.dart';
 ```
 
+## AI Skill
+
+This repository includes the `easy-ui-view-builder` AI skill for Codex, Claude Code, and compatible AI coding tools. It helps agents choose Easy UI components from a requirement and generate Flutter view code with the library.
+
+Install it from GitHub with `npx`. By default it installs both the Codex and Claude Code skills:
+
+```bash
+npx --yes github:Jason-chen-coder/EasyUI
+```
+
+Default install locations:
+
+- Codex: `${CODEX_HOME:-~/.codex}/skills/easy-ui-view-builder`
+- Claude Code: `~/.claude/skills/easy-ui-view-builder`
+
+You can also install only one target:
+
+```bash
+npx --yes github:Jason-chen-coder/EasyUI -- --target codex
+npx --yes github:Jason-chen-coder/EasyUI -- --target claude
+npx --yes github:Jason-chen-coder/EasyUI -- --target claude-project
+```
+
+Restart Codex or Claude Code after installation so the new skill is loaded. You can then invoke it by name:
+
+```text
+$easy-ui-view-builder Build an Easy UI order management page with filters, a data table, pagination, and a detail drawer.
+```
+
+After publishing to the npm registry, the same arguments are supported:
+
+```bash
+npx --yes easy-ui-skill@latest
+```
+
 ## Requirements
 
 This repository is currently verified with:

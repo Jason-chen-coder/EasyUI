@@ -17,7 +17,7 @@ const isEasyLocalPreview = easyLocalPreviewHosts.has(window.location.hostname);
 const easyServiceWorkerResetKey = 'easy_ui_sw_reset_once';
 const easyBuildVersion =
   new URL(document.currentScript?.src ?? window.location.href).searchParams.get('v') ??
-  '20260518-sponsor-nav';
+  '20260518-card-fade-in-fix';
 
 const withEasyBuildVersion = (path) => {
   const separator = path.includes('?') ? '&' : '?';
