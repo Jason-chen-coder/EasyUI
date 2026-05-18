@@ -1,5 +1,117 @@
-import 'package:easy_ui/easy_ui.dart';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+const _easyUiRepoUrl = 'https://github.com/Jason-chen-coder/EasyUI';
+const _easyUiPreviewUrl = 'https://jason-chen-coder.github.io/EasyUI/';
+const _githubProfileUrl = 'https://github.com/Jason-chen-coder';
+const _sponsorEmail = 'hongxin.jasonchen@gmail.com';
+
+Future<void> _launchExternal(
+  Uri uri, {
+  String webOnlyWindowName = '_blank',
+}) async {
+  final launched = await launchUrl(
+    uri,
+    mode: LaunchMode.platformDefault,
+    webOnlyWindowName: webOnlyWindowName,
+  );
+
+  if (!launched) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+}
+
+class _LandingTypography {
+  const _LandingTypography._();
+
+  static TextStyle heroTitle(_LandingPalette palette) {
+    return TextStyle(
+      color: palette.textStrong,
+      fontSize: 52,
+      height: 1.04,
+      fontWeight: FontWeight.w800,
+      letterSpacing: 0,
+    );
+  }
+
+  static TextStyle heroSubtitle(_LandingPalette palette) {
+    return TextStyle(
+      color: palette.textStrong,
+      fontSize: 24,
+      height: 1.32,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 0,
+    );
+  }
+
+  static TextStyle sectionTitle(_LandingPalette palette) {
+    return TextStyle(
+      color: palette.textMuted,
+      fontSize: 28,
+      height: 1.24,
+      fontWeight: FontWeight.w800,
+      letterSpacing: 0,
+    );
+  }
+
+  static TextStyle sectionEyebrow(_LandingPalette palette) {
+    return TextStyle(
+      color: palette.primary,
+      fontSize: 13,
+      height: 1.3,
+      fontWeight: FontWeight.w800,
+      letterSpacing: 1.1,
+    );
+  }
+
+  static TextStyle contentTitle(_LandingPalette palette) {
+    return TextStyle(
+      color: palette.textStrong,
+      fontSize: 18,
+      height: 1.35,
+      fontWeight: FontWeight.w800,
+      letterSpacing: 0,
+    );
+  }
+
+  static TextStyle body(_LandingPalette palette) {
+    return TextStyle(
+      color: palette.textMuted,
+      fontSize: 16,
+      height: 1.7,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
+    );
+  }
+
+  static TextStyle bodySmall(_LandingPalette palette) {
+    return TextStyle(
+      color: palette.textSoft,
+      fontSize: 14,
+      height: 1.65,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0,
+    );
+  }
+
+  static TextStyle link(_LandingPalette palette) {
+    return TextStyle(
+      color: palette.textMuted,
+      fontSize: 17,
+      height: 1.35,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0,
+    );
+  }
+
+  static TextStyle linkStrong(_LandingPalette palette) {
+    return link(
+      palette,
+    ).copyWith(color: palette.blue, fontWeight: FontWeight.w800);
+  }
+}
 
 class EasyLandingPage extends StatelessWidget {
   const EasyLandingPage({super.key, required this.onNavigate});
@@ -42,7 +154,7 @@ class EasyLandingPage extends StatelessWidget {
             child: _ConstrainedSection(
               top: 20,
               bottom: 64,
-              child: _ResourceSection(palette: palette, onNavigate: onNavigate),
+              child: _ResourceSection(palette: palette),
             ),
           ),
         ],
@@ -68,10 +180,7 @@ class _HeroSection extends StatelessWidget {
           builder: (context, constraints) {
             final compact = constraints.maxWidth < 850;
             final intro = _HeroIntro(palette: palette, onNavigate: onNavigate);
-            final visual = _HeroVisual(
-              palette: palette,
-              onNavigate: onNavigate,
-            );
+            final visual = _HeroVisual(palette: palette);
 
             if (compact) {
               return Column(
@@ -103,57 +212,21 @@ class _HeroIntro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            EasyStatusIndicator.green(
-              text: 'Flutter package',
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            ),
-            EasyStatusIndicator.blue(
-              text: 'Web ready',
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            ),
-          ],
-        ),
-        const SizedBox(height: 26),
-        Text(
-          'Easy UI Design',
-          style: theme.textTheme.displayMedium?.copyWith(
-            color: palette.textStrong,
-            fontSize: 52,
-            height: 1.04,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0,
-          ),
-        ),
+        Text('Easy UI Design', style: _LandingTypography.heroTitle(palette)),
         const SizedBox(height: 14),
         Text(
           'Flutter 全平台应用的组件工作台',
-          style: theme.textTheme.headlineSmall?.copyWith(
-            color: palette.textStrong,
-            fontSize: 24,
-            height: 1.3,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0,
-          ),
+          style: _LandingTypography.heroSubtitle(palette),
         ),
         const SizedBox(height: 18),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 620),
           child: Text(
             '从按钮、表单、数据展示到富文本和 H5 容器，Easy UI 将迁移后的组件集中成一个可浏览、可验证、可复制的 Flutter UI kit。',
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: palette.textMuted,
-              height: 1.75,
-              fontSize: 16,
-            ),
+            style: _LandingTypography.body(palette),
           ),
         ),
         const SizedBox(height: 30),
@@ -201,20 +274,12 @@ class _HeroIntro extends StatelessWidget {
 }
 
 class _HeroVisual extends StatelessWidget {
-  const _HeroVisual({required this.palette, required this.onNavigate});
+  const _HeroVisual({required this.palette});
 
   final _LandingPalette palette;
-  final ValueChanged<String> onNavigate;
 
   @override
   Widget build(BuildContext context) {
-    final cards = [
-      _PreviewItem('按钮', Icons.smart_button_outlined, palette.blue, '/button'),
-      _PreviewItem('表格', Icons.table_chart_outlined, palette.green, '/table'),
-      _PreviewItem('流程图', Icons.account_tree_outlined, palette.amber, '/flow'),
-      _PreviewItem('富文本', Icons.edit_note_outlined, palette.red, '/richEditor'),
-    ];
-
     return SizedBox(
       height: 382,
       child: Container(
@@ -240,41 +305,339 @@ class _HeroVisual extends StatelessWidget {
                 _WindowDot(color: palette.amber),
                 const SizedBox(width: 6),
                 _WindowDot(color: palette.green),
-                const Spacer(),
-                Text(
-                  'easy_ui/example',
-                  style: TextStyle(color: palette.textSoft, fontSize: 12),
-                ),
               ],
             ),
             const SizedBox(height: 16),
-            Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: cards.length,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 1.22,
-                ),
-                itemBuilder: (context, index) {
-                  final item = cards[index];
-                  return _PreviewTile(
-                    item: item,
-                    palette: palette,
-                    onNavigate: onNavigate,
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 14),
-            _CodeStrip(palette: palette),
+            Expanded(child: _LogoShowcase(palette: palette)),
           ],
         ),
       ),
     );
+  }
+}
+
+class _LogoShowcase extends StatefulWidget {
+  const _LogoShowcase({required this.palette});
+
+  final _LandingPalette palette;
+
+  @override
+  State<_LogoShowcase> createState() => _LogoShowcaseState();
+}
+
+class _LogoShowcaseState extends State<_LogoShowcase>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 9),
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.of(context).disableAnimations) {
+      _controller.stop();
+    } else if (!_controller.isAnimating) {
+      _controller.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final reducedMotion = MediaQuery.of(context).disableAnimations;
+    if (reducedMotion) {
+      return _buildStage(context, 0);
+    }
+
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, _) => _buildStage(context, _controller.value),
+    );
+  }
+
+  Widget _buildStage(BuildContext context, double progress) {
+    final palette = widget.palette;
+    final phase = progress * math.pi * 2;
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: palette.previewBackground,
+        border: Border.all(color: palette.border),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _LogoOrbitPainter(palette: palette, progress: progress),
+            ),
+          ),
+          Positioned(
+            width: 286,
+            height: 286,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    palette.primary.withValues(alpha: 0.18),
+                    palette.blue.withValues(alpha: 0.08),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final shortest = math.min(
+                constraints.maxWidth,
+                constraints.maxHeight,
+              );
+              final logoSize = shortest.clamp(138.0, 188.0).toDouble();
+              final badgeSize = shortest < 250 ? 38.0 : 46.0;
+              final logoScale = 1 + math.sin(phase) * 0.018;
+
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  _OrbitBadge(
+                    alignment: const Alignment(-0.72, -0.68),
+                    progress: progress,
+                    delay: 0,
+                    size: badgeSize,
+                    icon: Icons.smart_button_outlined,
+                    color: palette.blue,
+                    palette: palette,
+                  ),
+                  _OrbitBadge(
+                    alignment: const Alignment(0.72, -0.56),
+                    progress: progress,
+                    delay: 0.22,
+                    size: badgeSize,
+                    icon: Icons.table_chart_outlined,
+                    color: palette.green,
+                    palette: palette,
+                  ),
+                  _OrbitBadge(
+                    alignment: const Alignment(-0.68, 0.64),
+                    progress: progress,
+                    delay: 0.48,
+                    size: badgeSize,
+                    icon: Icons.tune,
+                    color: palette.amber,
+                    palette: palette,
+                  ),
+                  _OrbitBadge(
+                    alignment: const Alignment(0.67, 0.66),
+                    progress: progress,
+                    delay: 0.72,
+                    size: badgeSize,
+                    icon: Icons.edit_note_outlined,
+                    color: palette.red,
+                    palette: palette,
+                  ),
+                  _SparkDot(
+                    alignment: const Alignment(-0.18, -0.86),
+                    progress: progress,
+                    delay: 0.1,
+                    color: palette.primary,
+                  ),
+                  _SparkDot(
+                    alignment: const Alignment(0.22, 0.86),
+                    progress: progress,
+                    delay: 0.55,
+                    color: palette.blue,
+                  ),
+                  Transform.translate(
+                    offset: Offset(0, math.sin(phase + 0.6) * 3),
+                    child: Transform.scale(
+                      scale: logoScale,
+                      child: SizedBox(
+                        width: logoSize,
+                        height: logoSize,
+                        child: Image.asset(
+                          'assets/images/easy_ui_logo.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OrbitBadge extends StatelessWidget {
+  const _OrbitBadge({
+    required this.alignment,
+    required this.progress,
+    required this.delay,
+    required this.size,
+    required this.icon,
+    required this.color,
+    required this.palette,
+  });
+
+  final Alignment alignment;
+  final double progress;
+  final double delay;
+  final double size;
+  final IconData icon;
+  final Color color;
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    final phase = (progress + delay) * math.pi * 2;
+    final drift = Offset(math.cos(phase) * 5, math.sin(phase) * 6);
+
+    return Align(
+      alignment: alignment,
+      child: Transform.translate(
+        offset: drift,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: color.withValues(alpha: 0.22)),
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.08),
+                blurRadius: 18,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Icon(icon, color: color, size: size * 0.48),
+        ),
+      ),
+    );
+  }
+}
+
+class _SparkDot extends StatelessWidget {
+  const _SparkDot({
+    required this.alignment,
+    required this.progress,
+    required this.delay,
+    required this.color,
+  });
+
+  final Alignment alignment;
+  final double progress;
+  final double delay;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final phase = (progress + delay) * math.pi * 2;
+    final opacity = 0.28 + (math.sin(phase) + 1) * 0.22;
+
+    return Align(
+      alignment: alignment,
+      child: Opacity(
+        opacity: opacity,
+        child: Transform.scale(
+          scale: 0.82 + (math.sin(phase) + 1) * 0.18,
+          child: Container(
+            width: 9,
+            height: 9,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(color: color.withValues(alpha: 0.36), blurRadius: 14),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LogoOrbitPainter extends CustomPainter {
+  const _LogoOrbitPainter({required this.palette, required this.progress});
+
+  final _LandingPalette palette;
+  final double progress;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final basePaint =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1
+          ..color = palette.border.withValues(alpha: 0.78);
+    final activePaint =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..strokeCap = StrokeCap.round
+          ..color = palette.primary.withValues(alpha: 0.36);
+    final dotPaint =
+        Paint()
+          ..style = PaintingStyle.fill
+          ..color = palette.primary.withValues(alpha: 0.36);
+
+    final wideOrbit = Rect.fromCenter(
+      center: center,
+      width: size.width * 0.72,
+      height: size.height * 0.5,
+    );
+    final tallOrbit = Rect.fromCenter(
+      center: center,
+      width: size.width * 0.46,
+      height: size.height * 0.72,
+    );
+
+    canvas.drawOval(wideOrbit, basePaint);
+    canvas.drawOval(tallOrbit, basePaint);
+
+    final start = progress * math.pi * 2;
+    canvas.drawArc(wideOrbit, start, math.pi * 0.44, false, activePaint);
+    canvas.drawArc(
+      tallOrbit,
+      -start * 0.82,
+      math.pi * 0.36,
+      false,
+      activePaint,
+    );
+
+    for (final item in [
+      (wideOrbit, start + math.pi * 0.82),
+      (wideOrbit, start + math.pi * 1.56),
+      (tallOrbit, -start + math.pi * 0.34),
+      (tallOrbit, -start + math.pi * 1.22),
+    ]) {
+      final point = Offset(
+        item.$1.center.dx + math.cos(item.$2) * item.$1.width / 2,
+        item.$1.center.dy + math.sin(item.$2) * item.$1.height / 2,
+      );
+      canvas.drawCircle(point, 3.2, dotPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _LogoOrbitPainter oldDelegate) {
+    return oldDelegate.progress != progress || oldDelegate.palette != palette;
   }
 }
 
@@ -289,51 +652,56 @@ class _FeatureSection extends StatelessWidget {
       _FeatureData(
         icon: Icons.devices_other,
         color: palette.blue,
-        title: '全平台视图构建',
-        description: '覆盖 Web、桌面和移动端，示例工程直接验证组件在 Flutter 多端下的表现。',
+        title: '全平台支持',
+        description: '支持全平台应用开发中的视图构建。Android、iOS、MacOS、Linux、Windows、Web',
       ),
       _FeatureData(
-        icon: Icons.inventory_2_outlined,
-        color: palette.green,
-        title: '组件集中迁移',
-        description: '统一以 Easy 命名导出，保留原组件能力，同时清理包名、资源路径和示例入口。',
-      ),
-      _FeatureData(
-        icon: Icons.tune,
+        icon: Icons.widgets_outlined,
         color: palette.amber,
-        title: '可调主题系统',
-        description: '跟随 EasyTheme 与 Material Theme，示例内可切换亮色、暗色和语言环境。',
+        title: '组件化',
+        description: '组件独立存在，可选择使用个体组件。不侵入你原有的项目代码结构。',
+      ),
+      _FeatureData(
+        icon: Icons.code,
+        color: palette.green,
+        title: '源代码开放',
+        description: 'MIT 开源协议，源代码完全公开，允许任何个人和企业使用。',
       ),
       _FeatureData(
         icon: Icons.web_asset_outlined,
         color: palette.red,
-        title: 'Web 首屏友好',
-        description: '借鉴 TolyUI 的原生 splash 思路，在 Flutter 首帧之前给 Web 用户明确反馈。',
+        title: '响应式布局',
+        description: '根据设备屏幕信息，让视图可以响应式变化。',
       ),
     ];
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _SectionHeader(
-          eyebrow: 'CAPABILITIES',
-          title: '为真实项目准备的组件层',
-          description: 'Landing page 不是单独的宣传页，它会直接带你进入可运行的组件示例。',
-          palette: palette,
+        Text(
+          '功能特性',
+          textAlign: TextAlign.center,
+          style: _LandingTypography.sectionTitle(palette),
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 46),
         LayoutBuilder(
           builder: (context, constraints) {
-            final columns = constraints.maxWidth < 760 ? 1 : 2;
+            final width = constraints.maxWidth;
+            final columns =
+                width >= 1060
+                    ? 4
+                    : width >= 700
+                    ? 2
+                    : 1;
             return GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: items.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: columns,
-                mainAxisExtent: 154,
-                mainAxisSpacing: 14,
-                crossAxisSpacing: 14,
+                mainAxisExtent: 270,
+                mainAxisSpacing: 18,
+                crossAxisSpacing: 18,
               ),
               itemBuilder:
                   (context, index) =>
@@ -390,77 +758,426 @@ class _ComponentPreviewSection extends StatelessWidget {
 }
 
 class _ResourceSection extends StatelessWidget {
-  const _ResourceSection({required this.palette, required this.onNavigate});
+  const _ResourceSection({required this.palette});
 
   final _LandingPalette palette;
-  final ValueChanged<String> onNavigate;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
-      decoration: BoxDecoration(
-        color: palette.footer,
-        border: Border.all(color: palette.border),
-        borderRadius: BorderRadius.circular(8),
+    return Column(
+      children: [
+        _SponsorSection(palette: palette),
+        _FooterDivider(palette: palette),
+        _FooterLinksSection(palette: palette),
+        _FooterDivider(palette: palette),
+        _FooterCopyright(palette: palette),
+      ],
+    );
+  }
+}
+
+class _SponsorSection extends StatefulWidget {
+  const _SponsorSection({required this.palette});
+
+  final _LandingPalette palette;
+
+  @override
+  State<_SponsorSection> createState() => _SponsorSectionState();
+}
+
+class _SponsorSectionState extends State<_SponsorSection> {
+  final _sponsorTooltipKey = GlobalKey<TooltipState>();
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = widget.palette;
+    final projects = [
+      const _SponsorProjectData(
+        name: 'Mxgraph EasyFlowEditor',
+        description: '基于 mxGraph 和 Vue 2.0 的流程图编辑器',
+        url: 'https://github.com/Jason-chen-coder/Mxgraph-EasyFlowEditor',
+        imageAsset: 'assets/images/mxgraph_app_icon.png',
       ),
-      child: Wrap(
-        spacing: 32,
-        runSpacing: 18,
-        alignment: WrapAlignment.spaceBetween,
-        crossAxisAlignment: WrapCrossAlignment.center,
+      const _SponsorProjectData(
+        name: 'Flutter EasySpeechRecognition',
+        description: 'Flutter 语音识别与录音能力工具',
+        url:
+            'https://github.com/Jason-chen-coder/Flutter-EasySpeechRecognition',
+        imageAsset: 'assets/images/easy_speech_logo.jpg',
+      ),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 52),
+      child: Column(
         children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 520),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Ready for Easy UI',
-                  style: TextStyle(
-                    color: palette.textStrong,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '继续使用左侧导航查看组件细节，或从总览页扫描完整组件矩阵。',
-                  style: TextStyle(color: palette.textMuted, height: 1.6),
-                ),
-              ],
-            ),
+          Text(
+            '合作与赞助',
+            textAlign: TextAlign.center,
+            style: _LandingTypography.sectionTitle(palette),
           ),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              _TextLinkButton(
-                text: '组件总览',
-                icon: Icons.dashboard_customize_outlined,
-                route: '/overview',
-                palette: palette,
-                onNavigate: onNavigate,
+          const SizedBox(height: 54),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final compact = constraints.maxWidth < 760;
+              final projectCards =
+                  projects
+                      .map(
+                        (project) => _SponsorProjectCard(
+                          data: project,
+                          palette: palette,
+                        ),
+                      )
+                      .toList();
+
+              if (compact) {
+                return Column(
+                  children:
+                      projectCards
+                          .map(
+                            (card) => Padding(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: card,
+                            ),
+                          )
+                          .toList(),
+                );
+              }
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(child: projectCards[0]),
+                  const SizedBox(width: 78),
+                  Flexible(child: projectCards[1]),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 50),
+          Tooltip(
+            key: _sponsorTooltipKey,
+            message: _sponsorEmail,
+            triggerMode: TooltipTriggerMode.manual,
+            preferBelow: false,
+            showDuration: const Duration(seconds: 4),
+            child: OutlinedButton(
+              onPressed: () {
+                _sponsorTooltipKey.currentState?.ensureTooltipVisible();
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: palette.textMuted,
+                side: BorderSide(color: palette.borderStrong),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 34,
+                  vertical: 17,
+                ),
+                shape: const StadiumBorder(),
+                textStyle: _LandingTypography.link(palette),
               ),
-              _TextLinkButton(
-                text: '主题',
-                icon: Icons.palette_outlined,
-                route: '/theme',
-                palette: palette,
-                onNavigate: onNavigate,
-              ),
-              _TextLinkButton(
-                text: '富文本',
-                icon: Icons.edit_note_outlined,
-                route: '/richEditor',
-                palette: palette,
-                onNavigate: onNavigate,
-              ),
-            ],
+              child: const Text('成为赞助商!'),
+            ),
           ),
         ],
       ),
     );
+  }
+}
+
+class _SponsorProjectCard extends StatelessWidget {
+  const _SponsorProjectCard({required this.data, required this.palette});
+
+  final _SponsorProjectData data;
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: '打开 ${data.name}',
+      child: InkWell(
+        onTap:
+            () => _launchExternal(
+              Uri.parse(data.url),
+              webOnlyWindowName: '_self',
+            ),
+        borderRadius: BorderRadius.circular(8),
+        mouseCursor: SystemMouseCursors.click,
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _SponsorProjectIcon(data: data, palette: palette),
+              const SizedBox(width: 22),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      data.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: _LandingTypography.contentTitle(
+                        palette,
+                      ).copyWith(fontSize: 22),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      data.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: _LandingTypography.body(palette),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SponsorProjectIcon extends StatelessWidget {
+  const _SponsorProjectIcon({required this.data, required this.palette});
+
+  final _SponsorProjectData data;
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    if (data.imageAsset != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.asset(
+          data.imageAsset!,
+          width: 82,
+          height: 82,
+          fit: BoxFit.cover,
+        ),
+      );
+    }
+
+    return Container(
+      width: 82,
+      height: 82,
+      decoration: BoxDecoration(
+        color: palette.textStrong,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(data.icon!, color: palette.surface, size: 42),
+    );
+  }
+}
+
+class _FooterLinksSection extends StatelessWidget {
+  const _FooterLinksSection({required this.palette});
+
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    final columns = [
+      const _FooterColumnData(
+        title: '链接',
+        links: [
+          _FooterLinkData('Github', _easyUiRepoUrl),
+          _FooterLinkData('在线预览', _easyUiPreviewUrl),
+          _FooterLinkData('更新日志', '$_easyUiRepoUrl/releases'),
+          _FooterLinkData('常见问题', '$_easyUiRepoUrl/issues'),
+        ],
+      ),
+      const _FooterColumnData(
+        title: '讨论区',
+        links: [
+          _FooterLinkData('建议反馈', '$_easyUiRepoUrl/issues/new'),
+          _FooterLinkData('Issue 列表', '$_easyUiRepoUrl/issues'),
+          _FooterLinkData('参与贡献', '$_easyUiRepoUrl/pulls'),
+        ],
+      ),
+      const _FooterColumnData(
+        title: '资源链接',
+        links: [
+          _FooterLinkData(
+            'Mxgraph EasyFlowEditor',
+            'https://github.com/Jason-chen-coder/Mxgraph-EasyFlowEditor',
+          ),
+          _FooterLinkData(
+            'Flutter EasySpeechRecognition',
+            'https://github.com/Jason-chen-coder/Flutter-EasySpeechRecognition',
+          ),
+          _FooterLinkData('Github 主页', _githubProfileUrl),
+        ],
+      ),
+      const _FooterColumnData(
+        title: '联系我',
+        links: [
+          _FooterLinkData('邮箱', 'mailto:$_sponsorEmail'),
+          _FooterLinkData('Github', _githubProfileUrl),
+          _FooterLinkData('合作与赞助', 'mailto:$_sponsorEmail'),
+        ],
+      ),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 58),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final columnsPerRow =
+              constraints.maxWidth >= 900
+                  ? 4
+                  : constraints.maxWidth >= 620
+                  ? 2
+                  : 1;
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: columns.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columnsPerRow,
+              mainAxisExtent: 206,
+              mainAxisSpacing: 26,
+              crossAxisSpacing: 36,
+            ),
+            itemBuilder:
+                (context, index) =>
+                    _FooterColumn(data: columns[index], palette: palette),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _FooterColumn extends StatelessWidget {
+  const _FooterColumn({required this.data, required this.palette});
+
+  final _FooterColumnData data;
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          data.title,
+          style: _LandingTypography.sectionTitle(
+            palette,
+          ).copyWith(fontSize: 24),
+        ),
+        const SizedBox(height: 24),
+        ...data.links.map(
+          (link) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _FooterLink(data: link, palette: palette),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FooterLink extends StatelessWidget {
+  const _FooterLink({required this.data, required this.palette});
+
+  final _FooterLinkData data;
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => _launchExternal(Uri.parse(data.url)),
+      borderRadius: BorderRadius.circular(4),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Text(
+          data.label,
+          style: _LandingTypography.link(palette).copyWith(
+            decoration:
+                data.url.startsWith('http')
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
+            decorationColor: palette.textSoft,
+            decorationThickness: 1,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FooterCopyright extends StatelessWidget {
+  const _FooterCopyright({required this.palette});
+
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 28),
+      child: Column(
+        children: [
+          Wrap(
+            spacing: 6,
+            runSpacing: 4,
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(
+                'Made by',
+                style: _LandingTypography.link(
+                  palette,
+                ).copyWith(color: palette.textStrong),
+              ),
+              InkWell(
+                onTap: () => _launchExternal(Uri.parse(_githubProfileUrl)),
+                child: Text(
+                  'Jason Chen',
+                  style: _LandingTypography.linkStrong(palette),
+                ),
+              ),
+              Text(
+                '&',
+                style: _LandingTypography.link(
+                  palette,
+                ).copyWith(color: palette.textStrong),
+              ),
+              Text('Easy UI', style: _LandingTypography.linkStrong(palette)),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Copyright © 2026 Easy UI',
+            textAlign: TextAlign.center,
+            style: _LandingTypography.link(
+              palette,
+            ).copyWith(color: palette.textStrong),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            '联系邮箱 $_sponsorEmail',
+            textAlign: TextAlign.center,
+            style: _LandingTypography.bodySmall(
+              palette,
+            ).copyWith(color: palette.textMuted),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FooterDivider extends StatelessWidget {
+  const _FooterDivider({required this.palette});
+
+  final _LandingPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(height: 1, color: palette.border);
   }
 }
 
@@ -506,35 +1223,19 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          eyebrow,
-          style: theme.textTheme.labelMedium?.copyWith(
-            color: palette.primary,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.1,
-          ),
-        ),
+        Text(eyebrow, style: _LandingTypography.sectionEyebrow(palette)),
         const SizedBox(height: 8),
         Text(
           title,
-          style: theme.textTheme.headlineSmall?.copyWith(
-            color: palette.textStrong,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0,
-          ),
+          style: _LandingTypography.sectionTitle(
+            palette,
+          ).copyWith(color: palette.textStrong),
         ),
         const SizedBox(height: 10),
-        Text(
-          description,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: palette.textMuted,
-            height: 1.7,
-          ),
-        ),
+        Text(description, style: _LandingTypography.body(palette)),
       ],
     );
   }
@@ -563,8 +1264,8 @@ class _FeatureCardState extends State<_FeatureCard> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 160),
         curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.all(20),
-        transform: Matrix4.translationValues(0, _hovered ? -2 : 0, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 30),
+        transform: Matrix4.translationValues(0, _hovered ? -3 : 0, 0),
         decoration: BoxDecoration(
           color: palette.surface,
           border: Border.all(
@@ -582,42 +1283,28 @@ class _FeatureCardState extends State<_FeatureCard> {
                   ]
                   : null,
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 46,
-              height: 46,
-              decoration: BoxDecoration(
-                color: widget.data.color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(widget.data.icon, color: widget.data.color, size: 24),
+            Icon(
+              widget.data.icon,
+              color: widget.data.color,
+              size: 52,
+              opticalSize: 52,
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.data.title,
-                    style: TextStyle(
-                      color: palette.textStrong,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.data.description,
-                    style: TextStyle(
-                      color: palette.textMuted,
-                      height: 1.55,
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
-              ),
+            const SizedBox(height: 26),
+            Text(
+              widget.data.title,
+              textAlign: TextAlign.center,
+              style: _LandingTypography.contentTitle(palette),
+            ),
+            const SizedBox(height: 18),
+            Text(
+              widget.data.description,
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: _LandingTypography.bodySmall(palette),
             ),
           ],
         ),
@@ -701,11 +1388,9 @@ class _CategoryRow extends StatelessWidget {
           children: [
             Text(
               '0${index + 1}',
-              style: TextStyle(
-                color: colors[index],
-                fontWeight: FontWeight.w900,
-                fontSize: 18,
-              ),
+              style: _LandingTypography.contentTitle(
+                palette,
+              ).copyWith(color: colors[index]),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -714,15 +1399,14 @@ class _CategoryRow extends StatelessWidget {
                 children: [
                   Text(
                     data.title,
-                    style: TextStyle(
-                      color: palette.textStrong,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: _LandingTypography.contentTitle(palette),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     data.description,
-                    style: TextStyle(color: palette.textMuted, fontSize: 13),
+                    style: _LandingTypography.bodySmall(
+                      palette,
+                    ).copyWith(color: palette.textMuted),
                   ),
                 ],
               ),
@@ -730,122 +1414,6 @@ class _CategoryRow extends StatelessWidget {
             Icon(Icons.arrow_forward, size: 18, color: palette.textSoft),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _PreviewTile extends StatelessWidget {
-  const _PreviewTile({
-    required this.item,
-    required this.palette,
-    required this.onNavigate,
-  });
-
-  final _PreviewItem item;
-  final _LandingPalette palette;
-  final ValueChanged<String> onNavigate;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => onNavigate(item.route),
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: palette.previewBackground,
-          border: Border.all(color: palette.border),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              item.label,
-              style: TextStyle(
-                color: palette.textStrong,
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: Center(
-                child: Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: item.color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: item.color.withValues(alpha: 0.22),
-                    ),
-                  ),
-                  child: Icon(item.icon, color: item.color, size: 30),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CodeStrip extends StatelessWidget {
-  const _CodeStrip({required this.palette});
-
-  final _LandingPalette palette;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: palette.codeBackground,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        "import 'package:easy_ui/easy_ui.dart';",
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: palette.codeText,
-          fontSize: 13,
-          fontFamily: 'monospace',
-        ),
-      ),
-    );
-  }
-}
-
-class _TextLinkButton extends StatelessWidget {
-  const _TextLinkButton({
-    required this.text,
-    required this.icon,
-    required this.route,
-    required this.palette,
-    required this.onNavigate,
-  });
-
-  final String text;
-  final IconData icon;
-  final String route;
-  final _LandingPalette palette;
-  final ValueChanged<String> onNavigate;
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-      onPressed: () => onNavigate(route),
-      icon: Icon(icon, size: 17),
-      label: Text(text),
-      style: OutlinedButton.styleFrom(
-        foregroundColor: palette.textStrong,
-        side: BorderSide(color: palette.borderStrong),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }
@@ -880,20 +1448,41 @@ class _FeatureData {
   final String description;
 }
 
+class _SponsorProjectData {
+  const _SponsorProjectData({
+    required this.name,
+    required this.description,
+    required this.url,
+    this.icon,
+    this.imageAsset,
+  }) : assert(icon != null || imageAsset != null);
+
+  final String name;
+  final String description;
+  final String url;
+  final IconData? icon;
+  final String? imageAsset;
+}
+
+class _FooterColumnData {
+  const _FooterColumnData({required this.title, required this.links});
+
+  final String title;
+  final List<_FooterLinkData> links;
+}
+
+class _FooterLinkData {
+  const _FooterLinkData(this.label, this.url);
+
+  final String label;
+  final String url;
+}
+
 class _CategoryData {
   const _CategoryData(this.title, this.description, this.route);
 
   final String title;
   final String description;
-  final String route;
-}
-
-class _PreviewItem {
-  const _PreviewItem(this.label, this.icon, this.color, this.route);
-
-  final String label;
-  final IconData icon;
-  final Color color;
   final String route;
 }
 

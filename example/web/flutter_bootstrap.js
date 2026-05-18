@@ -15,10 +15,31 @@ window.addEventListener('flutter-first-frame', removeEasySplash, { once: true })
 const easyLocalPreviewHosts = new Set(['localhost', '127.0.0.1', '::1']);
 const isEasyLocalPreview = easyLocalPreviewHosts.has(window.location.hostname);
 const easyServiceWorkerResetKey = 'easy_ui_sw_reset_once';
+const easyBuildVersion =
+  new URL(document.currentScript?.src ?? window.location.href).searchParams.get('v') ??
+  '20260518-sponsor-nav';
+
+const withEasyBuildVersion = (path) => {
+  const separator = path.includes('?') ? '&' : '?';
+  return `${path}${separator}v=${encodeURIComponent(easyBuildVersion)}`;
+};
+
+if (_flutter.buildConfig?.builds) {
+  for (const build of _flutter.buildConfig.builds) {
+    if (build.mainJsPath) {
+      build.mainJsPath = withEasyBuildVersion(build.mainJsPath);
+    }
+  }
+}
 
 const clearLocalPreviewServiceWorkers = async () => {
   if (!isEasyLocalPreview || !('serviceWorker' in navigator)) {
     return false;
+  }
+
+  if ('caches' in window) {
+    const cacheKeys = await caches.keys();
+    await Promise.all(cacheKeys.map((cacheKey) => caches.delete(cacheKey)));
   }
 
   const registrations = await navigator.serviceWorker.getRegistrations();

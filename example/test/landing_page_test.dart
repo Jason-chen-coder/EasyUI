@@ -12,7 +12,7 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     await tester.pumpWidget(const MainApp());
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     expect(find.text('Easy UI Design'), findsOneWidget);
     expect(find.text('搜索组件...'), findsNothing);
